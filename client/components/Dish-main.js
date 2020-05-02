@@ -203,6 +203,20 @@ export class Dish extends React.Component {
                       alt="Uploaded image"
                       src={`data:image/*;base64, ${image.Image}`}
                     />
+                    <div className="imgPredictions">
+                      <h4>Entry #{index + 1} Predictions</h4>
+                      <div>
+                        {image.predictions.map(pdt => {
+                          return (
+                            <div key={pdt.id}>
+                              <div>
+                                {pdt.name}: {pdt.value}
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
                     <br />
                     <hr />
                   </div>

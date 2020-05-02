@@ -20,12 +20,17 @@ form div {
   display: inline-block;
 }
 
+/* .imagesDiv {
+  display: flex;
+  align-items: center;
+} */
+
 .uploadImg {
   max-width: 50vw;
   max-height: 30vh;
 }
 
 .imgPredictions {
-  max-width: 50vw;
+  max-width: 40vw;
   border: dashed grey;
 }
