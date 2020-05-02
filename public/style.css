@@ -19,3 +19,8 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.uploadImg {
+  max-width: 200px;
+  max-height: 200px;
+}

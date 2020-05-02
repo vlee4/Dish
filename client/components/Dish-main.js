@@ -3,45 +3,44 @@ import {connect} from 'react-redux'
 import {MY_API_KEY} from '../../secrets'
 
 export class Dish extends React.Component {
+  //convert image to base64, then set on state as array, then map throught array on state to create new <img> tag
   constructor() {
     super()
     this.state = {
-      selectImage: '',
+      selectImage: [],
       source: '',
       predictions: []
     }
-    this.predictImage = this.predictImage.bind(this)
-    // this.isValidFile = this.isValidFile.bind(this)
     this.getUpload = this.getUpload.bind(this)
     this.getSource = this.getSource.bind(this)
     this.setPredictions = this.setPredictions.bind(this)
     this.doPredict = this.doPredict.bind(this)
+    this.predictImage = this.predictImage.bind(this)
   }
-
-  getUpload(event) {
-    this.setState({selectImage: event.target.value})
-    console.log('Is this the image?', event.target.value)
+  //Keeps track of the image being uploaded locally
+  getUpload(img) {
+    console.log('getting UPLOAD')
+    if (this.state.selectImage.length) {
+      //if there's already img on state
+      let currentState = this.state.selectImage
+      this.setState({selectImage: [...currentState, img]})
+    } else {
+      //if not image on state yet
+      this.setState({selectImage: [img]})
+    }
+    // console.log('Is this the image?', img)
+    // const imgDiv = document.getElementById('imagesDiv')
   }
-  //use source later to determine where photo came from (ie. url or upload)
+  //use source to determine where photo came from (ie. url or upload)
   getSource(event) {
     console.log('SOURCE', event.target.value)
     this.setState({source: event.target.value})
   }
-
+  //saves predictions for later use
   setPredictions(pdts) {
     this.setState({predictions: pdts})
   }
-  // isValidFile() {
-  //   console.log('What file was uploaded?', this.state.selectImage)
-  //   let file = this.state.selectImage
-  //   if (file.value == '') {
-  //     console.log('Please upload a file first')
-  //   } else {
-  //     this.predictImage(file.value, 'file')
-  //   }
-  //   //will call predict Image if file is valid
-  // }
-
+  //Actually does the prediction
   doPredict(Clarifai, app, thisDish, imageInput) {
     app.models
       .predict(Clarifai.FOOD_MODEL, imageInput)
@@ -58,12 +57,11 @@ export class Dish extends React.Component {
         )
       )
   }
-
+  //Runs once predict is clicked
   predictImage(event) {
     //REF: Clarifai Starter
     event.preventDefault()
     console.log('EVENT', event)
-    // console.log('value', event.target.value)
 
     //Make Clarifai app instance
     const Clarifai = require('clarifai')
@@ -71,37 +69,24 @@ export class Dish extends React.Component {
     const app = new Clarifai.App({
       apiKey: MY_API_KEY
     })
+
     //IF THE FILE IS FROM LOCAL MACHINE
     if (this.state.source === 'file') {
       const file = document.getElementById('filename').files[0]
       var reader = new FileReader()
-      // const file = document.getElementById('filename').value
-      console.log('My file', file)
-      console.log('Which This', this)
       const thisDish = this
-      //Supposedly converting file w/ some base64 stuffs
+      // this.getUpload(file)
+      //Converting file to base64 string
       //Load is fired when a read has completed successfully
       reader.addEventListener(
         'load',
         function() {
-          var localBase64 = reader.result.split('base64,')[1] //the FileReader result = the file's contents, which is only valid after the read is complete
+          //the FileReader result = the file's contents, which is only valid after the read is complete
+          var localBase64 = reader.result.split('base64,')[1]
           console.log('PREDICTING')
           //Identify image from image data: just console.logging right now
           thisDish.doPredict(Clarifai, app, thisDish, {base64: localBase64})
-          // app.models
-          //   .predict(Clarifai.FOOD_MODEL, {base64: localBase64})
-          //   .then(function (resp) {
-          //     thisDish.setPredictions(resp.outputs[0].data.concepts)
-          //   })
-          //   .then(function () {
-          //     console.log('Here are my predictions', thisDish.state.predictions)
-          //   })
-          //   .catch((err) =>
-          //     console.log(
-          //       "HOUSTON, WE'VE GOT A PROBLEM w/ the local IMAGE PREDICT",
-          //       err
-          //     )
-          //   )
+          thisDish.getUpload(localBase64)
         },
         false
       )
@@ -115,14 +100,6 @@ export class Dish extends React.Component {
       console.log('img', img)
 
       this.doPredict(Clarifai, app, this, {url: img})
-
-      // app.models
-      //   .predict(Clarifai.FOOD_MODEL, {url: img})
-      //   .then((resp) => console.log('MY RESPONSE', resp))
-      //   // .then((resp) => console.log(resp.outputs[0].data.concepts[0].name))
-      //   .catch((err) =>
-      //     console.log('An ERROR HATH OCCURRED w/ the IMAGE URL PREDICT', err)
-      //   )
     }
   }
 
@@ -150,8 +127,7 @@ export class Dish extends React.Component {
               placeholder="Filename"
               accept="image/*"
               size="80"
-              // value={this.state.selectImage}
-              onChange={this.getUpload}
+              // onChange={this.getUpload}
             />
           </div>
           <div>
@@ -162,6 +138,7 @@ export class Dish extends React.Component {
               name="imageUrl"
               placeholder="Image URL"
               size="80"
+              onChange={this.getUpload}
             />
             <button
               type="submit"
@@ -171,6 +148,24 @@ export class Dish extends React.Component {
             >
               Predict
             </button>
+          </div>
+          <div id="imagesDiv">
+            {this.state.selectImage.length ? (
+              this.state.selectImage.map((image, index) => {
+                console.log('setting up image')
+                return (
+                  <div key={`id_${index}`}>
+                    <img
+                      className="uploadImg"
+                      alt="Uploaded image"
+                      src={`data:image/*;base64, ${image}`}
+                    />
+                  </div>
+                )
+              })
+            ) : (
+              <img className="uploadImg" src="/defaultDish.png" />
+            )}
           </div>
         </form>
       </div>
