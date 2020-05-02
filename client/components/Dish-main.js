@@ -100,6 +100,7 @@ export class Dish extends React.Component {
       console.log('img', img)
 
       this.doPredict(Clarifai, app, this, {url: img})
+      this.getUpload({src: 'url', Image: img})
     }
   }
 
@@ -138,7 +139,7 @@ export class Dish extends React.Component {
               name="imageUrl"
               placeholder="Image URL"
               size="80"
-              onChange={this.getUpload}
+              // onChange={this.getUpload}
             />
             <button
               type="submit"
@@ -153,6 +154,18 @@ export class Dish extends React.Component {
             {this.state.selectImage.length ? (
               this.state.selectImage.map((image, index) => {
                 console.log('setting up image')
+                if (image.hasOwnProperty('src')) {
+                  return (
+                    <div key={`id_${index}`}>
+                      <img
+                        className="uploadImg"
+                        alt="image from url"
+                        src={image.Image}
+                      />
+                    </div>
+                  )
+                }
+
                 return (
                   <div key={`id_${index}`}>
                     <img
