@@ -8,12 +8,12 @@ export class Dish extends React.Component {
     super()
     this.state = {
       selectImage: [],
-      source: '',
-      predictions: []
+      source: ''
+      // predictions: []
     }
     this.getUpload = this.getUpload.bind(this)
     this.getSource = this.getSource.bind(this)
-    this.setPredictions = this.setPredictions.bind(this)
+    // this.setPredictions = this.setPredictions.bind(this)
     this.doPredict = this.doPredict.bind(this)
     this.predictImage = this.predictImage.bind(this)
   }
@@ -35,13 +35,13 @@ export class Dish extends React.Component {
     this.setState({source: event.target.value})
   }
   //saves predictions for later use
-  setPredictions(pdts) {
-    this.setState({predictions: pdts})
-  }
+  // setPredictions(pdts) {
+  //   this.setState({predictions: pdts})
+  // }
   //Actually does the prediction
   doPredict(Clarifai, app, thisDish, imageInput, src) {
     app.models
-      .predict(Clarifai.FOOD_MODEL, imageInput)
+      .predict(Clarifai.FOOD_MODEL, imageInput, {minValue: 0.5})
       .then(function(resp) {
         // thisDish.setPredictions(resp.outputs[0].data.concepts)
         src === 'file'
