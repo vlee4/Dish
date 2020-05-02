@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {MY_API_KEY} from '../../secrets'
+import Recipes from './Recipes'
 
 export class Dish extends React.Component {
   //convert image to base64, then set on state as array, then map throught array on state to create new <img> tag
@@ -189,6 +190,9 @@ export class Dish extends React.Component {
                             )
                           })}
                         </div>
+                      </div>
+                      <div>
+                        <Recipes />
                       </div>
                       <br />
                       <hr />
