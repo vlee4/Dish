@@ -18,18 +18,16 @@ export class Dish extends React.Component {
     this.predictImage = this.predictImage.bind(this)
   }
   //Keeps track of the image being uploaded locally
-  getUpload(img) {
+  getUpload(imgData) {
     console.log('getting UPLOAD')
     if (this.state.selectImage.length) {
-      //if there's already img on state
+      //if there's already imgData on state
       let currentState = this.state.selectImage
-      this.setState({selectImage: [...currentState, img]})
+      this.setState({selectImage: [...currentState, imgData]})
     } else {
       //if not image on state yet
-      this.setState({selectImage: [img]})
+      this.setState({selectImage: [imgData]})
     }
-    // console.log('Is this the image?', img)
-    // const imgDiv = document.getElementById('imagesDiv')
   }
   //use source to determine where photo came from (ie. url or upload)
   getSource(event) {
@@ -41,20 +39,28 @@ export class Dish extends React.Component {
     this.setState({predictions: pdts})
   }
   //Actually does the prediction
-  doPredict(Clarifai, app, thisDish, imageInput) {
+  doPredict(Clarifai, app, thisDish, imageInput, src) {
     app.models
       .predict(Clarifai.FOOD_MODEL, imageInput)
       .then(function(resp) {
-        thisDish.setPredictions(resp.outputs[0].data.concepts)
+        // thisDish.setPredictions(resp.outputs[0].data.concepts)
+        src === 'file'
+          ? thisDish.getUpload({
+              src: 'file',
+              Image: imageInput.base64,
+              predictions: resp.outputs[0].data.concepts
+            })
+          : thisDish.getUpload({
+              src: 'url',
+              Image: imageInput.url,
+              predictions: resp.outputs[0].data.concepts
+            })
       })
       .then(function() {
-        console.log('Here are my predictions', thisDish.state.predictions)
+        console.log('Got pass setting Predictions & getUpload')
       })
       .catch(err =>
-        console.log(
-          "HOUSTON, WE'VE GOT A PROBLEM w/ the local IMAGE PREDICT",
-          err
-        )
+        console.log("HOUSTON, WE'VE GOT A PROBLEM w/ the IMAGE PREDICT", err)
       )
   }
   //Runs once predict is clicked
@@ -75,7 +81,7 @@ export class Dish extends React.Component {
       const file = document.getElementById('filename').files[0]
       var reader = new FileReader()
       const thisDish = this
-      // this.getUpload(file)
+
       //Converting file to base64 string
       //Load is fired when a read has completed successfully
       reader.addEventListener(
@@ -85,8 +91,14 @@ export class Dish extends React.Component {
           var localBase64 = reader.result.split('base64,')[1]
           console.log('PREDICTING')
           //Identify image from image data: just console.logging right now
-          thisDish.doPredict(Clarifai, app, thisDish, {base64: localBase64})
-          thisDish.getUpload(localBase64)
+          thisDish.doPredict(
+            Clarifai,
+            app,
+            thisDish,
+            {base64: localBase64},
+            'file'
+          )
+          // thisDish.getUpload(localBase64)
         },
         false
       )
@@ -100,7 +112,7 @@ export class Dish extends React.Component {
       console.log('img', img)
 
       this.doPredict(Clarifai, app, this, {url: img})
-      this.getUpload({src: 'url', Image: img})
+      // this.getUpload({src: 'url', Image: img})
     }
   }
 
@@ -150,11 +162,13 @@ export class Dish extends React.Component {
               Predict
             </button>
           </div>
+          <br />
+          <hr />
           <div id="imagesDiv">
             {this.state.selectImage.length ? (
               this.state.selectImage.map((image, index) => {
                 console.log('setting up image')
-                if (image.hasOwnProperty('src')) {
+                if (image.src === 'url') {
                   return (
                     <div key={`id_${index}`}>
                       <img
@@ -162,6 +176,22 @@ export class Dish extends React.Component {
                         alt="image from url"
                         src={image.Image}
                       />
+                      <div className="imgPredictions">
+                        <h4>Entry #{index + 1} Predictions</h4>
+                        <div>
+                          {image.predictions.map(pdt => {
+                            return (
+                              <div key={pdt.id}>
+                                <div>
+                                  {pdt.name}: {pdt.value}
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                      <br />
+                      <hr />
                     </div>
                   )
                 }
@@ -171,8 +201,10 @@ export class Dish extends React.Component {
                     <img
                       className="uploadImg"
                       alt="Uploaded image"
-                      src={`data:image/*;base64, ${image}`}
+                      src={`data:image/*;base64, ${image.Image}`}
                     />
+                    <br />
+                    <hr />
                   </div>
                 )
               })

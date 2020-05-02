@@ -21,6 +21,11 @@ form div {
 }
 
 .uploadImg {
-  max-width: 200px;
-  max-height: 200px;
+  max-width: 50vw;
+  max-height: 30vh;
+}
+
+.imgPredictions {
+  max-width: 50vw;
+  border: dashed grey;
 }
