@@ -163,49 +163,20 @@ export class Dish extends React.Component {
               Predict
             </button>
           </div>
-          <br />
-          <hr />
-          <div id="imagesDiv">
-            {this.state.selectImage.length ? (
-              this.state.selectImage.map((image, index) => {
-                console.log('setting up image')
-                if (image.src === 'url') {
-                  return (
-                    <div key={`id_${index}`}>
-                      <img
-                        className="uploadImg"
-                        alt="image from url"
-                        src={image.Image}
-                      />
-                      <div className="imgPredictions">
-                        <h4>Entry #{index + 1} Predictions</h4>
-                        <div>
-                          {image.predictions.map(pdt => {
-                            return (
-                              <div key={pdt.id}>
-                                <div>
-                                  {pdt.name}: {pdt.value}
-                                </div>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-                      <div>
-                        <Recipes />
-                      </div>
-                      <br />
-                      <hr />
-                    </div>
-                  )
-                }
-
+        </form>
+        <br />
+        <hr />
+        <div id="imagesDiv">
+          {this.state.selectImage.length ? (
+            this.state.selectImage.map((image, index) => {
+              console.log('setting up image')
+              if (image.src === 'url') {
                 return (
                   <div key={`id_${index}`}>
                     <img
                       className="uploadImg"
-                      alt="Uploaded image"
-                      src={`data:image/*;base64, ${image.Image}`}
+                      alt="image from url"
+                      src={image.Image}
                     />
                     <div className="imgPredictions">
                       <h4>Entry #{index + 1} Predictions</h4>
@@ -221,16 +192,54 @@ export class Dish extends React.Component {
                         })}
                       </div>
                     </div>
+                    <div>
+                      <Recipes
+                        entry={index + 1}
+                        predictions={image.predictions}
+                      />
+                    </div>
                     <br />
                     <hr />
                   </div>
                 )
-              })
-            ) : (
-              <img className="uploadImg" src="/defaultDish.png" />
-            )}
-          </div>
-        </form>
+              }
+
+              return (
+                <div key={`id_${index}`}>
+                  <img
+                    className="uploadImg"
+                    alt="Uploaded image"
+                    src={`data:image/*;base64, ${image.Image}`}
+                  />
+                  <div className="imgPredictions">
+                    <h4>Entry #{index + 1} Predictions</h4>
+                    <div>
+                      {image.predictions.map(pdt => {
+                        return (
+                          <div key={pdt.id}>
+                            <div>
+                              {pdt.name}: {pdt.value}
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                  <div>
+                    <Recipes
+                      entry={index + 1}
+                      predictions={image.predictions}
+                    />
+                  </div>
+                  <br />
+                  <hr />
+                </div>
+              )
+            })
+          ) : (
+            <img className="uploadImg" src="/defaultDish.png" />
+          )}
+        </div>
       </div>
     )
   }
