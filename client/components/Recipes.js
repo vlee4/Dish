@@ -63,6 +63,24 @@ export class Recipes extends React.Component {
           <button type="submit">Find Recipe</button>
         </form>
         <div>
+          <div>
+            {this.state.ingredient === 'ramen' &&
+            this.state.recipes.length > 0 ? (
+              <div>
+                <h3>Iggy's New Recipe</h3>
+                <img src="/Shenanigans/IggyNewRecipe.gif" />
+                <a href="https://finalfantasy.fandom.com/wiki/Recipe_%28Final_Fantasy_XV%29">
+                  Link to Recipe
+                </a>
+                <br />
+                <div>Total Cook time: 15 minutes</div>
+                <div>Calories: 15</div>
+                <hr />
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
           {this.state.recipes.length > 0 ? (
             this.state.recipes[0].hits.map((rp, index) => {
               console.log('RECIPE', rp.recipe)
@@ -74,7 +92,7 @@ export class Recipes extends React.Component {
                   <a href={recipe.url}>Link to Recipe</a>
                   <br />
                   <div>Total Cook time: {recipe.totalTime} minutes</div>
-                  <div>Calories{recipe.calories}</div>
+                  <div>Calories: {recipe.calories}</div>
                   <hr />
                 </div>
               )
