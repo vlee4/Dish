@@ -23,7 +23,7 @@ export class Recipes extends React.Component {
         appKey: EDA_KEY
       })
       const results = await client.search({query: search})
-      console.log(`Here's some Recipes for ${search}`, results)
+      // console.log(`Here's some Recipes for ${search}`, results)
       this.setState({recipes: [results]})
     } catch (error) {
       console.log(`Error getting Recipes for ${search}`, error)
@@ -42,7 +42,7 @@ export class Recipes extends React.Component {
   }
 
   render() {
-    console.log('PROPS', this.props)
+    // console.log('PROPS', this.props)
     if (!this.props.predictions) {
       return <h2>Loading...</h2>
     }
@@ -62,31 +62,28 @@ export class Recipes extends React.Component {
           </select>
           <button type="submit">Find Recipe</button>
         </form>
-        <div>
-          <div>
-            {this.state.ingredient === 'ramen' &&
-            this.state.recipes.length > 0 ? (
-              <div>
+        <div className="entryRecipes">
+          {this.state.ingredient === 'ramen' &&
+            this.state.recipes.length > 0 && (
+              <div className="oneRecipe">
                 <h3>Iggy's New Recipe</h3>
                 <img src="/Shenanigans/IggyNewRecipe.gif" />
+                <hr />
                 <a href="https://finalfantasy.fandom.com/wiki/Recipe_%28Final_Fantasy_XV%29">
                   Link to Recipe
                 </a>
-                <br />
+                {/* <br /> */}
                 <div>Total Cook time: 15 minutes</div>
                 <div>Calories: 15</div>
-                <hr />
               </div>
-            ) : (
-              <></>
             )}
-          </div>
+
           {this.state.recipes.length > 0 ? (
             this.state.recipes[0].hits.map((rp, index) => {
-              console.log('RECIPE', rp.recipe)
+              // console.log('RECIPE', rp.recipe)
               const recipe = rp.recipe
               return (
-                <div key={`id_${index}`}>
+                <div key={`id_${index}`} className="oneRecipe">
                   <h3>{recipe.label}</h3>
                   <img src={recipe.image} />
                   <a href={recipe.url}>Link to Recipe</a>
@@ -98,7 +95,7 @@ export class Recipes extends React.Component {
               )
             })
           ) : (
-            <div>Nothing yet</div>
+            <div>Choose one</div>
           )}
         </div>
       </div>
