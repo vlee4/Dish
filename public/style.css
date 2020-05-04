@@ -1,3 +1,15 @@
+* {
+  font-family: 'Indie Flower', cursive;
+}
+
+/* [type='file'] {
+  font-family: 'Indie Flower', cursive;
+} */
+
+h1 {
+  font-family: 'Zilla Slab Highlight', cursive;
+}
+
 body {
   font-family: sans-serif;
 }
@@ -25,12 +37,68 @@ form div {
   align-items: center;
 } */
 
+#hide input[type='file'] {
+  display: none;
+}
+#hide input[type='file'] + label {
+  display: inline-block;
+  margin: 20px;
+  padding: 4px 32px;
+  background-color: #ffffff;
+  border: solid 1px #666f77;
+  border-radius: 6px;
+  color: #666f77;
+}
+#hide input[type='file']:active + label {
+  background-image: none;
+  background-color: #2d6c7a;
+  color: #ffffff;
+}
+
 .uploadImg {
   max-width: 50vw;
   max-height: 30vh;
+  margin-right: 1rem;
 }
 
 .imgPredictions {
-  max-width: 40vw;
+  width: 40vw;
   border: dashed grey;
+  padding-left: 2rem;
+}
+
+/* Header */
+#Header {
+  margin: 0rem;
+  background-image: linear-gradient(to right, #00bf8f, #001510);
+  padding: 0.5rem 0rem 0rem 0.5rem;
+  text-align: center;
+  color: white;
+  text-shadow: 0px 4px 4px black;
+  border-radius: 10px;
+}
+#mainApp {
+  padding: 0rem 0rem 0rem 1rem;
+}
+
+#imgPred {
+  display: flex;
+}
+/* Footer */
+
+/* .footer {
+  position: fixed;
+  width: 100vw;
+  background-color: peachpuff;
+  left: 0;
+  bottom: 0;
+} */
+#Resources {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#Clarifai {
+  max-height: 30px;
 }

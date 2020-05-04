@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {MY_API_KEY} from '../../secrets'
 import Recipes from './Recipes'
+import {amber} from '@material-ui/core/colors'
 
 export class Dish extends React.Component {
   //convert image to base64, then set on state as array, then map throught array on state to create new <img> tag
@@ -119,7 +120,7 @@ export class Dish extends React.Component {
 
   render() {
     return (
-      <div>
+      <div id="mainApp">
         <h2>This is the main app page</h2>
         <p>We are currently in construction</p>
         <form onSubmit={this.predictImage}>
@@ -173,23 +174,25 @@ export class Dish extends React.Component {
               if (image.src === 'url') {
                 return (
                   <div key={`id_${index}`}>
-                    <img
-                      className="uploadImg"
-                      alt="image from url"
-                      src={image.Image}
-                    />
-                    <div className="imgPredictions">
-                      <h4>Entry #{index + 1} Predictions</h4>
-                      <div>
-                        {image.predictions.map(pdt => {
-                          return (
-                            <div key={pdt.id}>
-                              <div>
-                                {pdt.name}: {pdt.value}
+                    <div id="imgPred">
+                      <img
+                        className="uploadImg"
+                        alt="image from url"
+                        src={image.Image}
+                      />
+                      <div className="imgPredictions">
+                        <h4>Entry #{index + 1} Predictions</h4>
+                        <div>
+                          {image.predictions.map(pdt => {
+                            return (
+                              <div key={pdt.id}>
+                                <div>
+                                  {pdt.name}: {pdt.value}
+                                </div>
                               </div>
-                            </div>
-                          )
-                        })}
+                            )
+                          })}
+                        </div>
                       </div>
                     </div>
                     <div>
