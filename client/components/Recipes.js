@@ -2,7 +2,6 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {EDA_KEY, EDA_ID} from '../../secrets'
 import {RecipeSearchClient} from 'edamam-api'
-// const {RecipeSearchClient} = require('edamam-api')
 
 export class Recipes extends React.Component {
   constructor(props) {
@@ -23,7 +22,6 @@ export class Recipes extends React.Component {
         appKey: EDA_KEY
       })
       const results = await client.search({query: search})
-      // console.log(`Here's some Recipes for ${search}`, results)
       this.setState({recipes: [results]})
     } catch (error) {
       console.log(`Error getting Recipes for ${search}`, error)
@@ -42,7 +40,6 @@ export class Recipes extends React.Component {
   }
 
   render() {
-    // console.log('PROPS', this.props)
     if (!this.props.predictions) {
       return <h2>Loading...</h2>
     }
@@ -72,7 +69,6 @@ export class Recipes extends React.Component {
                 <a href="https://finalfantasy.fandom.com/wiki/Recipe_%28Final_Fantasy_XV%29">
                   Link to Recipe
                 </a>
-                {/* <br /> */}
                 <div>Total Cook time: 15 minutes</div>
                 <div>Calories: 15</div>
               </div>

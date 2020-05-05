@@ -2,20 +2,16 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {MY_API_KEY} from '../../secrets'
 import Recipes from './Recipes'
-// import {amber} from '@material-ui/core/colors'
 
 export class Dish extends React.Component {
-  //convert image to base64, then set on state as array, then map throught array on state to create new <img> tag
   constructor() {
     super()
     this.state = {
       selectImage: [],
       source: ''
-      // predictions: []
     }
     this.getUpload = this.getUpload.bind(this)
     this.getSource = this.getSource.bind(this)
-    // this.setPredictions = this.setPredictions.bind(this)
     this.doPredict = this.doPredict.bind(this)
     this.predictImage = this.predictImage.bind(this)
   }
@@ -36,16 +32,12 @@ export class Dish extends React.Component {
     console.log('SOURCE', event.target.value)
     this.setState({source: event.target.value})
   }
-  //saves predictions for later use
-  // setPredictions(pdts) {
-  //   this.setState({predictions: pdts})
-  // }
+
   //Actually does the prediction
   doPredict(Clarifai, app, thisDish, imageInput, src) {
     app.models
       .predict(Clarifai.FOOD_MODEL, imageInput, {minValue: 0.5})
       .then(function(resp) {
-        // thisDish.setPredictions(resp.outputs[0].data.concepts)
         src === 'file'
           ? thisDish.getUpload({
               src: 'file',
@@ -92,7 +84,7 @@ export class Dish extends React.Component {
           //the FileReader result = the file's contents, which is only valid after the read is complete
           var localBase64 = reader.result.split('base64,')[1]
           console.log('PREDICTING')
-          //Identify image from image data: just console.logging right now
+          //Identify image from image data
           thisDish.doPredict(
             Clarifai,
             app,
@@ -100,7 +92,6 @@ export class Dish extends React.Component {
             {base64: localBase64},
             'file'
           )
-          // thisDish.getUpload(localBase64)
         },
         false
       )
@@ -114,7 +105,6 @@ export class Dish extends React.Component {
       console.log('img', img)
 
       this.doPredict(Clarifai, app, this, {url: img})
-      // this.getUpload({src: 'url', Image: img})
     }
   }
 
@@ -140,7 +130,7 @@ export class Dish extends React.Component {
             >
               Click me
             </button>
-            {/* input could also be a captured image using the computer's cam, use input type=capture */}
+            {/*Future: input could also be a captured image using the computer's cam, use input type=capture */}
             <input
               name="filename"
               type="file"
@@ -148,7 +138,6 @@ export class Dish extends React.Component {
               placeholder="Filename"
               accept="image/*"
               size="80"
-              // onChange={this.getUpload}
             />
           </div>
           <div>
@@ -159,7 +148,6 @@ export class Dish extends React.Component {
               name="imageUrl"
               placeholder="Image URL"
               size="80"
-              // onChange={this.getUpload}
             />
             <button
               type="submit"
