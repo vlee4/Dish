@@ -19,3 +19,18 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+/* .imagesDiv {
+  display: flex;
+  align-items: center;
+} */
+
+.uploadImg {
+  max-width: 50vw;
+  max-height: 30vh;
+}
+
+.imgPredictions {
+  max-width: 40vw;
+  border: dashed grey;
+}
