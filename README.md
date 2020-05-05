@@ -1,8 +1,8 @@
-# Dish
+# Dish: Something Yummy
+
+Dish: Something Yummy is a "what's-in-your-fridge"-like web application with a twist. The application accepts an image of an ingredient or dish the user finds appetizing, populates a list of descriptors, and then generates a handful of recipes based on the user's selected descriptor.
 
 (Made using Boilermaker)
-
-_Good things come in pairs_
 
 Looking to mix up a backend with `express`/`sequelize` and a frontend with
 `react`/`redux`? That's `boilermaker`!
